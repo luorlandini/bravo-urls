@@ -5,18 +5,19 @@ import { v4 as uuidv4 } from 'uuid';
 const Form = () => {
     const { dispatch } = useContext(Store);
 
-    const [item, setItem] = useState("");
+    const [url, setUrl] = useState("");
+    const [key, setKey] = useState("");
+    const [count, setCount] = useState(0);
 
     const handleItemChange = (e) => {
-        setItem(e.target.value);
+        setUrl(e.target.value);
     }
 
     const handleItemAdd = () => {
 
-        item.key = uuidv4()
-
-        dispatch({ type: "ADD_ITEM", payload: item });
-        setItem("");
+        setKey(uuidv4())
+        dispatch({ type: "ADD_ITEM", payload: { key: key, url: url, count: count } });
+        setUrl("");
     }
 
 
@@ -28,9 +29,11 @@ const Form = () => {
                 <div className="input-group">
                     <input
                         className="form-control"
-                        value={item.url}
+                        value={url}
+                        type="url"
+                        placeholder="https://example.com"
+
                         autoFocus={true}
-                        placeholder="Enter an url"
                         onChange={handleItemChange}
                     />
                     <div className="input-group-append">
