@@ -1,25 +1,31 @@
 import React, { useContext, useState } from "react";
 import Store from "./../../store";
 import { v4 as uuidv4 } from 'uuid';
-
+import { validateUrl } from '../../utilities'
+import { Modal } from 'react-bootstrap';
 const Form = () => {
     const { dispatch } = useContext(Store);
 
-    const [item, setItem] = useState("");
+    const [url, setUrl] = useState("");
+    const [count, setCount] = useState(0);
+    const [showAlert, setShowAlert] = useState(false);
+    const handleCloseAlert = () => setShowAlert(false);
+    const handleShowAlert = () => setShowAlert(true);
 
     const handleItemChange = (e) => {
-        setItem(e.target.value);
+        setUrl(e.target.value);
     }
 
     const handleItemAdd = () => {
 
-        item.key = uuidv4()
-
-        dispatch({ type: "ADD_ITEM", payload: item });
-        setItem("");
+        const isValideUrl = validateUrl(url);
+        if (!isValideUrl) {
+            handleShowAlert()
+            return false
+        }
+        dispatch({ type: "ADD_ITEM", payload: { key: uuidv4(), url: url, count: count } });
+        setUrl("");
     }
-
-
 
     return (
         <div className="row">
@@ -28,9 +34,11 @@ const Form = () => {
                 <div className="input-group">
                     <input
                         className="form-control"
-                        value={item.url}
+                        value={url}
+                        type="url"
+                        placeholder="https://example.com"
+
                         autoFocus={true}
-                        placeholder="Enter an url"
                         onChange={handleItemChange}
                     />
                     <div className="input-group-append">
@@ -40,6 +48,11 @@ const Form = () => {
                     </div>
                 </div>
             </div>
+            <Modal show={showAlert} onHide={handleCloseAlert}>
+                <Modal.Header closeButton>
+                </Modal.Header>
+                <Modal.Body>Please, insert a valid url, es: https://example.com</Modal.Body>
+            </Modal>
         </div>
     );
 }
