@@ -2,15 +2,13 @@ import React, { useContext, useState } from "react";
 import Store from "./../../store";
 import { v4 as uuidv4 } from 'uuid';
 import { validateUrl } from '../../utilities'
-import { Modal, Button } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
 const Form = () => {
     const { dispatch } = useContext(Store);
 
     const [url, setUrl] = useState("");
-    const [key, setKey] = useState("");
     const [count, setCount] = useState(0);
     const [showAlert, setShowAlert] = useState(false);
-
     const handleCloseAlert = () => setShowAlert(false);
     const handleShowAlert = () => setShowAlert(true);
 
@@ -21,13 +19,11 @@ const Form = () => {
     const handleItemAdd = () => {
 
         const isValideUrl = validateUrl(url);
-
         if (!isValideUrl) {
             handleShowAlert()
+            return false
         }
-
-        setKey(uuidv4())
-        dispatch({ type: "ADD_ITEM", payload: { key: key, url: url, count: count } });
+        dispatch({ type: "ADD_ITEM", payload: { key: uuidv4(), url: url, count: count } });
         setUrl("");
     }
 
