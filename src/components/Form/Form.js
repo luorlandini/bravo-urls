@@ -1,13 +1,18 @@
 import React, { useContext, useState } from "react";
 import Store from "./../../store";
 import { v4 as uuidv4 } from 'uuid';
-
+import { validateUrl } from '../../utilities'
+import { Modal, Button } from 'react-bootstrap';
 const Form = () => {
     const { dispatch } = useContext(Store);
 
     const [url, setUrl] = useState("");
     const [key, setKey] = useState("");
     const [count, setCount] = useState(0);
+    const [showAlert, setShowAlert] = useState(false);
+
+    const handleCloseAlert = () => setShowAlert(false);
+    const handleShowAlert = () => setShowAlert(true);
 
     const handleItemChange = (e) => {
         setUrl(e.target.value);
@@ -15,12 +20,16 @@ const Form = () => {
 
     const handleItemAdd = () => {
 
+        const isValideUrl = validateUrl(url);
+
+        if (!isValideUrl) {
+            handleShowAlert()
+        }
+
         setKey(uuidv4())
         dispatch({ type: "ADD_ITEM", payload: { key: key, url: url, count: count } });
         setUrl("");
     }
-
-
 
     return (
         <div className="row">
@@ -43,6 +52,11 @@ const Form = () => {
                     </div>
                 </div>
             </div>
+            <Modal show={showAlert} onHide={handleCloseAlert}>
+                <Modal.Header closeButton>
+                </Modal.Header>
+                <Modal.Body>Please, insert a valid url, es: https://example.com</Modal.Body>
+            </Modal>
         </div>
     );
 }
