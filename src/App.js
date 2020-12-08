@@ -2,7 +2,7 @@ import React, { useContext, useReducer } from "react";
 import Form from "./components/Form";
 import List from "./components/List"
 import Store from "./store";
-import reducer from "./reducer";
+import reducer from "./reducer/";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App = () => {
