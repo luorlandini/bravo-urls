@@ -17,6 +17,17 @@ export default function reducer(state, action) {
                 ...state,
                 items: state.items.filter(item => item !== action.payload)
             };
+        case "COUNT_VISIT":
+            const newItems = state.items.map((item, index) => {
+                var tempItems = (item.key === action.payload.key) ? Object.assign({}, action.payload) : Object.assign({}, item);
+
+                return tempItems;
+            });
+            return {
+                ...state,
+                items: newItems
+            };
+
         default:
             return state;
     }
