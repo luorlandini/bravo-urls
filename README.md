@@ -7,10 +7,14 @@ Clone the repo
     $ cd bravo-urls
 #### Install
 
-    $ yarn install or npm install
+    $ yarn install
+    or
+    $ npm install
 #### Start
 
-    $ yarn start or npm start
+    $ yarn start
+    or
+    $ npm start
 ### Requirements
 
 git client
