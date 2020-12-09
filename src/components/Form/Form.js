@@ -3,6 +3,8 @@ import Store from "./../../store";
 import { v4 as uuidv4 } from 'uuid';
 import { validateUrl } from '../../utilities'
 import { Modal } from 'react-bootstrap';
+import { DOMAIN_API, ENDPOINT_POST_URLS } from '../../constants'
+import axios from 'axios'
 const Form = () => {
     const { dispatch } = useContext(Store);
 
@@ -12,18 +14,33 @@ const Form = () => {
     const handleCloseAlert = () => setShowAlert(false);
     const handleShowAlert = () => setShowAlert(true);
 
+    let urlApi = `${DOMAIN_API}${ENDPOINT_POST_URLS}`
+
     const handleItemChange = (e) => {
         setUrl(e.target.value);
     }
 
-    const handleItemAdd = () => {
+    const HandleItemAdd = () => {
 
         const isValideUrl = validateUrl(url);
+
         if (!isValideUrl) {
             handleShowAlert()
             return false
         }
-        dispatch({ type: "ADD_ITEM", payload: { key: uuidv4(), url: url, count: count } });
+        let data = { key: uuidv4(), url: url, count: count };
+
+        axios.post(urlApi, { data })
+            .then(res => {
+                console.log(res);
+                console.log(res.data);
+            })
+            .catch(function (error) {
+                //inviare errore a logger, tipo sentry, lato server
+                console.log(error);
+            });
+
+        dispatch({ type: "ADD_ITEM", payload: data });
         setUrl("");
     }
 
@@ -42,7 +59,7 @@ const Form = () => {
                         onChange={handleItemChange}
                     />
                     <div className="input-group-append">
-                        <button className="btn btn-primary" onClick={handleItemAdd}>
+                        <button className="btn btn-primary" onClick={HandleItemAdd}>
                             Add
                         </button>
                     </div>
